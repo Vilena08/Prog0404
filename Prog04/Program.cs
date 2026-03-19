@@ -29,9 +29,8 @@ class Program {
       Console.WriteLine(" 0. Save and exit ");
       Console.Write(" Select action: ");
 
-      string choice = Console.ReadLine();
+      switch (Console.ReadLine()) {
 
-      switch (choice) {
         case "1":
           Console.Write(" Enter text: ");
           string text = Console.ReadLine();
@@ -61,8 +60,9 @@ class Program {
         case "7":
           Console.Write(" Enter the backup file name: ");
           string backupFile = Console.ReadLine();
-          if (File.Exists(backupFile))
+          if (File.Exists(backupFile)) {
             editor.RestoreFromBackup(backupFile);
+          }
           else
             Console.WriteLine(" File not found ");
           break;
@@ -77,7 +77,14 @@ class Program {
         case "9":
           Console.Write(" Enter keywords separated by commas: ");
           string input = Console.ReadLine();
-          List<string> keywords = input.Split(',').Select(key => key.Trim()).ToList();
+
+          string[] splitKeywords = input.Split(',');
+          List<string> keywords = new List<string>();
+
+          for (int indexText = 0; indexText < splitKeywords.Length; ++indexText) {
+            keywords.Add(splitKeywords[indexText].Trim());
+          }
+
           searcher.DisplayIndex(keywords);
           break;
 

@@ -3,24 +3,25 @@ using System.Collections.Generic;
 using System.IO;
 
 public class FileSearcher {
-  private string directory;
+  private string _directory;
 
   public FileSearcher(string directory) {
-    this.directory = directory;
+    this._directory = directory;
   }
 
   public List<string> SearchByKeyword(string keyword) {
     List<string> results = new List<string>();
 
-    if (!Directory.Exists(directory)) {
+    if (!Directory.Exists(_directory)) {
       Console.WriteLine(" Directory does not exist ");
       return results;
     }
 
-    string[] files = Directory.GetFiles(directory, " *.txt ", SearchOption.AllDirectories);
+    string[] files = Directory.GetFiles(_directory, " *.txt ", SearchOption.AllDirectories);
     Console.WriteLine($" Searching for \"{keyword}\" in {files.Length} files... ");
 
-    foreach (string file in files) {
+    for (int indexText = 0; indexText < files.Length; ++indexText) {
+      string file = files[indexText];
       try {
         string content = File.ReadAllText(file);
         if (content.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0) {
@@ -38,17 +39,20 @@ public class FileSearcher {
   public Dictionary<string, List<string>> CreateIndex(List<string> keywords) {
     Dictionary<string, List<string>> index = new Dictionary<string, List<string>>();
 
-    foreach (string keyword in keywords) {
+    for (int indexText = 0; indexText < keywords.Count; ++indexText) {
+      string keyword = keywords[indexText];
       index[keyword] = new List<string>();
     }
 
-    string[] files = Directory.GetFiles(directory, " *.txt ", SearchOption.AllDirectories);
+    string[] files = Directory.GetFiles(_directory, " *.txt ", SearchOption.AllDirectories);
 
-    foreach (string file in files) {
+    for (int indexText = 0; indexText < files.Length; ++indexText) {
+      string file = files[indexText];
       try {
         string content = File.ReadAllText(file).ToLower();
 
-        foreach (string keyword in keywords) {
+        for (int indexTexts = 0; indexTexts < keywords.Count; ++indexTexts) {
+          string keyword = keywords[indexTexts];
           if (content.Contains(keyword.ToLower())) {
             index[keyword].Add(file);
           }
