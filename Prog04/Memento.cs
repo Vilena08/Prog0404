@@ -14,3 +14,15 @@ public interface IOriginator {
   object GetMemento();
   void SetMemento(object memento);
 }
+
+public class Caretaker {  // добавила класс "Смотритель"
+  private object memento;
+  
+  public void SaveState(IOriginator originator) {
+    memento = originator.GetMemento();
+  }
+
+  public void RestoreState(IOriginator originator) {
+    originator.SetMemento(memento);
+  }
+}
