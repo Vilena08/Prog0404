@@ -6,11 +6,14 @@ public class TextEditor : IOriginator {
   private TextFile textFile;
   private object savedState;
   private string filePath;
+  private Caretaker caretaker; // добавлен 
 
   public TextEditor(string path) {
     this.filePath = path;
     this.textFile = new TextFile(path);
+    this.caretaker = new Caretaker(); // добавлен 
     Console.WriteLine($" Editor opened. File: {path} ");
+    caretaker.SaveState(this); // добавлен 
   }
 
   public void AddLine(string text) {
@@ -19,6 +22,7 @@ public class TextEditor : IOriginator {
       return;
     }
 
+    caretaker.SaveState(this);  // добавлен 
     textFile.Content.Add(text);
     Console.WriteLine($" Line added: \"{text}\" ");
   }
@@ -33,14 +37,8 @@ public class TextEditor : IOriginator {
   }
 
   public void Undo() {
-    if (savedState != null) {
-      SetMemento(savedState);
-      Console.WriteLine(" State restored ");
-      DisplayContent();
-    }
-    else {
-      Console.WriteLine(" No saved state ");
-    }
+    caretaker.RestoreState(this);  // изменено
+    DisplayContent();
   }
 
   public void SaveToFile() {
