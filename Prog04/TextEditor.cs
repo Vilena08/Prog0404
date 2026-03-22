@@ -4,7 +4,6 @@ using System.IO;
 
 public class TextEditor : IOriginator {
   private TextFile textFile;
-  private object savedState;
   private string filePath;
   private Caretaker caretaker; // добавлен 
 
